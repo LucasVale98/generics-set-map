@@ -1,28 +1,35 @@
 package application;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.print.PrintService;
+import entities.Product;
+import serices.CalculationService;
 
 public class Program {
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+		List<Product> list = new ArrayList<>();
+		
+		String path = "C:\\Auto Estudos\\18 - Java COMPLETO 2020 Programação Orientada a Objetos +Projetos\\Seção 19 Generics, Set, Map\\in.txt";
 
-		PrintService ps = new PrintService();
 		
-		System.out.print("How many values? ");
-		int n = sc.nextInt();
-		
-		for (int i = 0; i < n; i++) {
-			int value = sc.nextInt();
-			ps.addValue(value);
+		try (BufferedReader br = new BufferedReader(new FileReader(path))){
+			
+			String line = br.readLine();
+			while (line != null) {
+				String[] fields = line.split(",");
+				list.add(new Product(fields[0], Double.parseDouble(fields[1])));
+				line = br.readLine();
+			}
+			
+			Product x = CalculationService.max(list);
+			System.out.println("Max: ");
+			System.out.println(x);
+		} catch (IOException e) {
+			System.out.println("Error " + e.getMessage());
 		}
-
-		ps.print();
-		System.out.println("First: " + ps.first());
-		
-		sc.close();
 	}
 }
